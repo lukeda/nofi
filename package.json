@@ -1,6 +1,6 @@
 {
   "name": "@lukeda/nofi",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Low-fidelity mockups for agents. Pug structure, Tailwind layout, instant comparison boards.",
   "type": "module",
   "license": "MIT",
