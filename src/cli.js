@@ -15,6 +15,7 @@ const help = `nofi — explore layouts before building them
   nofi board <files.pug...|board.yaml|-> --output <file.html|file.png>
 
 Options:
+  --stdout            Write HTML to stdout without creating an output file
   --title <text>       Label for a single render (default: filename)
   --viewport <WxH>     Override every mockup viewport, e.g. 390x844
   --theme <name|path>   wireframe (default), blueprint, or a CSS file
@@ -29,6 +30,7 @@ try {
   const { values, positionals } = parseArgs({
     allowPositionals: true,
     options: {
+      stdout: { type: 'boolean' },
       theme: { type: 'string' },
       title: { type: 'string' },
       viewport: { type: 'string' },
@@ -71,6 +73,10 @@ try {
         throw new Error(
           '--title is for a single render; use board YAML for labels.',
         );
+      if (values.stdout && values.output !== undefined)
+        throw new Error(
+          '--stdout cannot be combined with --output. It emits HTML only.',
+        );
       const manifestInputs = files.filter(
         (file) => file === '-' || /\.ya?ml$/i.test(file),
       );
@@ -90,14 +96,16 @@ try {
         config = parseBoardConfig(source, { filename });
       }
       const items = config.items ?? files.map((file) => ({ file }));
-      const output =
-        values.output ??
-        `output/${command === 'board' ? 'board' : 'mockup'}.html`;
-      const extension = extname(output).toLowerCase();
+      const output = values.stdout
+        ? undefined
+        : (values.output ??
+          `output/${command === 'board' ? 'board' : 'mockup'}.html`);
+      const extension = output ? extname(output).toLowerCase() : '.html';
       if (!['.html', '.png'].includes(extension))
         throw new Error('Output must end in .html or .png.');
       if (
-        [...files, ...items.map((item) => item.file)].some(
+        output &&
+        [...files, ...items.map((item) => item.file).filter(Boolean)].some(
           (file) => resolve(file) === resolve(output),
         )
       )
@@ -108,27 +116,50 @@ try {
           ? config.viewport
           : parseViewport(values.viewport);
       const mockups = [];
-      for (const { file, name } of items)
-        mockups.push({
-          ...(await render(await readFile(file, 'utf8'), {
-            theme: values.theme ?? config.theme,
-            viewport,
-            defaults,
+      const errors = [];
+      for (const [index, { file, pug, name }] of items.entries()) {
+        const filename = file ?? `inline-${index + 1}.pug`;
+        try {
+          mockups.push({
+            ...(await render(pug ?? (await readFile(file, 'utf8')), {
+              theme: values.theme ?? config.theme,
+              viewport,
+              defaults,
+              filename,
+              title:
+                values.title ??
+                name ??
+                (file ? undefined : `Option ${index + 1}`),
+            })),
             filename: file,
-            title: values.title ?? name,
-          })),
-          filename: file,
-        });
+          });
+        } catch (error) {
+          errors.push(
+            `${filename}${name ? ` (${name})` : ''}:\n${error.message}`,
+          );
+        }
+      }
+      if (errors.length) {
+        throw new Error(
+          command === 'board'
+            ? `${errors.length} of ${items.length} board inputs failed. No output written.\n\n${errors.join('\n\n')}`
+            : errors[0],
+        );
+      }
       const document =
         command === 'board'
           ? board(mockups, {
               columns: Number(values.columns ?? config.columns ?? 4),
             })
           : mockups[0];
-      await mkdir(dirname(output), { recursive: true });
-      if (extension === '.png') await screenshot(document, output);
-      else await writeFile(output, document.html);
-      console.log(`Rendered ${output}`);
+      if (values.stdout) {
+        process.stdout.write(document.html);
+      } else {
+        await mkdir(dirname(output), { recursive: true });
+        if (extension === '.png') await screenshot(document, output);
+        else await writeFile(output, document.html);
+        console.log(`Rendered ${output}`);
+      }
     }
   }
 } catch (error) {

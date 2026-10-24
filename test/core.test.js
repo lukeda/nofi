@@ -211,3 +211,41 @@ test('semantic colour utilities compile to theme variables, including tints', as
     );
   }
 });
+
+test('Tailwind shorthand failures include a fix without changing Pug syntax', () => {
+  for (const markup of [
+    'span.py-0.5 Foo',
+    'span.w-2/3 Foo',
+    'div.md:flex-row Foo',
+    'span.text-[13px] Foo',
+  ]) {
+    assert.throws(
+      () => parseNofi(markup),
+      (error) => {
+        assert.match(error.message, /Hint: Tailwind/);
+        assert.match(error.message, /quoted class attribute/);
+        return true;
+      },
+    );
+  }
+  assert.throws(
+    () => parseNofi('span.py-0.5 Foo', { filename: 'billing.pug' }),
+    (error) =>
+      error.code === 'PUG:INVALID_CLASS_NAME' &&
+      error.line === 1 &&
+      error.message.includes('billing.pug:1:'),
+  );
+  const good = parseNofi(
+    'span.rounded-full(class="py-0.5 w-2/3 text-[13px] md:flex-row bg-primary/10") Paid',
+  );
+  assert.ok(good.classes.includes('py-0.5'));
+  assert.ok(good.classes.includes('md:flex-row'));
+  assert.throws(
+    () => parseNofi('script nope'),
+    (error) => !error.message.includes('Hint:'),
+  );
+  assert.throws(
+    () => parseNofi('div.p-4(class="py-0.5")\n  script nope'),
+    (error) => !error.message.includes('Hint:'),
+  );
+});

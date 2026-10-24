@@ -37,7 +37,7 @@ The first compares four layouts for the same sign-in screen; the second shows fo
 
 The package already exposes the `nofi` binary and ships source, themes, examples, and the skill. `pnpm pack --dry-run` checks the package contents. The package is named `@lukeda/nofi`, with public publishing configured and GitHub, Pages, and issue links set. Publishing requires access to the npm `lukeda` scope.
 
-After publication as `@lukeda/nofi`, agents can use:
+To run a specific version:
 
 ```sh
 npx --yes @lukeda/nofi@<version> board board.yaml -o board.html
@@ -46,7 +46,7 @@ npx --yes @lukeda/nofi@<version> setup
 
 Replace `<version>` with a published version. `npx` resolves and caches the package; it does not require a global or project installation. Chromium is a separate download, installed by `setup` using the renderer's matching Playwright version. HTML does not require Chromium. A project-local pinned dev dependency is useful for repeated/reproducible workflows but is optional.
 
-The unscoped npm name `nofi` belongs to another package. Always use `@lukeda/nofi` for this project. No npm publication has been performed.
+The unscoped npm name `nofi` belongs to another package. Always use `@lukeda/nofi` for this project.
 
 Before publishing, verify the project:
 

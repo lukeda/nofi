@@ -31,11 +31,37 @@ items:
 EOF
 ```
 
-Each item requires `file`; `name` is optional and defaults to the filename. A manifest needs at least one item. File and custom theme paths resolve relative to the manifest file, or the working directory for stdin. Output paths always resolve from the working directory. Do not combine a manifest with other positional inputs. The CLI's former `--names` JSON option is replaced by item names in YAML.
+Each item requires exactly one of `file` or `pug` (a non-empty string of inline markup). File-backed and inline items can be mixed. `name` is optional: it defaults to the filename for file-backed items or “Option N” for inline items, where N is the position in the board. A manifest needs at least one item. File and custom theme paths resolve relative to the manifest file, or the working directory for stdin. Output paths always resolve from the working directory. Do not combine a manifest with other positional inputs. The CLI's former `--names` JSON option is replaced by item names in YAML.
 
 Shared `viewport`, `theme`, and `columns` are optional. Dimensions must be integers from 1 to 4096; columns range from 1 to 8. Precedence is **CLI flags → board manifest → project config → built-in defaults**. Project config supports viewport and theme, while columns default to 4.
 
 Set `viewport: [640, 480]` and `theme: wireframe` in `nofi.config.yaml` for project defaults. Discovery starts in the working directory and searches ancestors. CLI flags such as `--viewport 390x844` and `--theme blueprint` override the whole batch. Without settings, dimensions are 640×480 and the theme is wireframe.
+
+## Inline markup and stdout
+
+Generate a board without source or output files:
+
+```sh
+npx --yes @lukeda/nofi board - --stdout <<'EOF'
+viewport: [640, 480]
+columns: 2
+items:
+  - name: Sidebar
+    pug: |
+      main.flex.gap-4.p-6
+        aside.w-40 Navigation
+        section.flex-1 Content
+  - name: Top navigation
+    pug: |
+      main.space-y-4.p-6
+        nav Navigation
+        section Content
+EOF
+```
+
+`--stdout` works with `board` and `render`. It writes only the HTML document to stdout; errors go to stderr. It cannot be combined with `--output` and does not export PNG. Inline items also work in saved manifests and with normal `-o board.html` or `-o board.png` output.
+
+Nofi creates no files or browser processes for HTML stdout output. It still reads project config and theme files. This does not grant execution permission: `npx` may download packages and write caches, and the shell may store a heredoc temporarily. In a restricted mode, use an already-installed renderer through the host's permitted stdin mechanism. Do not redirect stdout to a file unless writes are permitted. If execution itself is prohibited, provide Pug as text instead.
 
 ## Library and viewport behaviour
 
@@ -47,7 +73,7 @@ Viewport dimensions control PNG exports and board frames. Standalone HTML fills 
 
 Indentation nests elements. Dots add classes. Text after the tag and classes is literal content. Pug's `|` text lines and static attributes are supported. An optional `body` must be the only root element. Otherwise the renderer supplies it.
 
-Use quoted class attributes for Tailwind classes containing punctuation:
+Use quoted class attributes for Tailwind classes containing punctuation, including decimal spacing (`py-0.5`, `gap-2.5`), fractions (`w-2/3`), variants (`md:flex-row`), arbitrary values (`text-[13px]`), and opacity (`bg-primary/10`). Pug dot shorthand cannot represent these classes; nofi adds a fix hint to related parse errors. Simple classes such as `.flex` remain valid shorthand:
 
 ```pug
 div(class="grid grid-cols-1 md:grid-cols-2 gap-2.5")
@@ -57,7 +83,7 @@ div(class="grid grid-cols-1 md:grid-cols-2 gap-2.5")
 
 Use semantic colours from [the theme guide](themes.md) so mockups adapt to different themes.
 
-Nofi supports a declarative subset of Pug, not its full template programming language. Attribute values must be string, number, or boolean literals. Arrays, objects, functions, interpolation, loops, mixins, includes, extends, filters, raw HTML, and executable JavaScript are unsupported. Text is HTML-escaped. Errors refer to the original source line numbers.
+Nofi supports a declarative subset of Pug, not its full template programming language. Attribute values must be string, number, or boolean literals. Arrays, objects, functions, interpolation, loops, mixins, includes, extends, filters, raw HTML, and executable JavaScript are unsupported. Text is HTML-escaped. Errors refer to the original source line numbers. Board commands collect the first failure from every failing input before exiting; they do not write partial output or overwrite an existing artifact on failure. Pug still stops at the first error within each source, so more errors in that source may appear after fixing it.
 
 Common structural HTML, headings, text, lists, tables, forms, and figures are supported. The exact tag and attribute allowlists live in `src/parse.js`. Event handlers, URLs, scripts, embedded content, and inline styles are excluded. Links are visual placeholders without navigation.
 

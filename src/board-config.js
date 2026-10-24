@@ -39,11 +39,18 @@ export function parseBoardConfig(
   if (!Array.isArray(config.items) || !config.items.length)
     throw new Error('Board items must be a non-empty array.');
   config.items = config.items.map((item) => {
-    mapping(item, ['file', 'name'], 'Board item');
-    if (typeof item.file !== 'string' || !item.file.trim())
-      throw new Error('Each board item needs a file path.');
+    mapping(item, ['file', 'pug', 'name'], 'Board item');
+    const hasFile = Object.hasOwn(item, 'file');
+    const hasPug = Object.hasOwn(item, 'pug');
+    if (hasFile === hasPug)
+      throw new Error('Each board item needs exactly one of file or pug.');
+    const key = hasFile ? 'file' : 'pug';
+    if (typeof item[key] !== 'string' || !item[key].trim())
+      throw new Error(`Board item ${key} must be a non-empty string.`);
     if (item.name !== undefined) validateTitle(item.name);
-    return { file: resolve(base, item.file), name: item.name };
+    return hasFile
+      ? { file: resolve(base, item.file), name: item.name }
+      : { pug: item.pug, name: item.name };
   });
   return config;
 }

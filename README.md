@@ -40,17 +40,21 @@ main.flex.flex-col.gap-4.p-8
 
 ## Give your agent nofi
 
-This is an early prototype. The GitHub and playground links will become available after the first push and Pages deployment. The npm package `@lukeda/nofi` is prepared but not yet published.
-
-After the first push, install the skill:
+Install the skill:
 
 ```sh
 npx skills add lukeda/nofi --skill nofi
 ```
 
-Before the first push, use `npx skills add /path/to/nofi --skill nofi` instead.
+Ask your agent to use **nofi** to sketch layouts and render a comparison board. The skill handles source files, rendering, and keeping your chosen layout for implementation.
 
-The skill includes renderer setup instructions. It can create temporary `.pug` files, render a board, and keep the sources available while you choose. Skill installation and renderer installation are currently separate; after npm publication, agents can use `npx --yes @lukeda/nofi` without a permanent install. The CLI command and skill stay named `nofi`.
+The renderer runs through `npx`:
+
+```sh
+npx --yes @lukeda/nofi board board.yaml -o board.html
+```
+
+For PNG output, install Chromium once with `npx --yes @lukeda/nofi setup`.
 
 [Agent setup](docs/agents.md) · [Local development](docs/development.md) · [Contributing](CONTRIBUTING.md)
 
@@ -69,9 +73,9 @@ items:
     name: Top navigation
 ```
 
-The CLI accepts a board file or YAML on stdin through a heredoc. HTML is standalone; PNG export uses Chromium. See the [board commands](docs/format.md#boards).
+The CLI accepts a board file or YAML on stdin through a heredoc. Items can reference files or contain inline `pug`; `--stdout` returns HTML without creating output files. HTML is standalone; PNG export uses Chromium. See the [board commands](docs/format.md#boards).
 
-The examples include six dashboard layouts, four login layouts, two settings layouts, and two checkout flows. The browser playground includes all of them, with editable source, viewport controls, and themes. It is a static site prepared for [GitHub Pages](docs/development.md#github-pages).
+The examples include six dashboard layouts, four login layouts, two settings layouts, and two checkout flows. The browser playground includes all of them, with editable source, viewport controls, and themes. Try it in the [playground](https://lukeda.github.io/nofi/).
 
 ## Why this approach?
 

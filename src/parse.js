@@ -90,7 +90,7 @@ function renderNode(node, classes) {
   return `<${node.name}${attributes}>${voidTags.has(node.name) ? '' : `${content}</${node.name}>`}`;
 }
 
-export function parseNofi(
+function parseSource(
   source,
   {
     filename = 'mockup.pug',
@@ -129,4 +129,26 @@ export function parseNofi(
     html: roots[0]?.name === 'body' ? html : `<body>${html}</body>`,
     classes: [...classes],
   };
+}
+
+/** Preserve Pug diagnostics while explaining the common Tailwind shorthand trap. */
+export function parseNofi(source, options = {}) {
+  try {
+    return parseSource(source, options);
+  } catch (error) {
+    if (typeof source !== 'string') throw error;
+    const line = error.line ?? Number(error.message.match(/^Line (\d+):/)?.[1]);
+    const text = source.replace(/^\uFEFF/, '').split(/\r?\n/)[line - 1] ?? '';
+    // Examine only the tag/class prefix, never text or quoted attributes.
+    const shorthand =
+      text.match(/^\s*(?:[a-z][\w-]*)?([.#][^\s(]+)/i)?.[1] ?? '';
+    if (
+      error.code === 'PUG:INVALID_CLASS_NAME' ||
+      /\.\d|\/[\w[]|\[|:[\w-]/.test(shorthand)
+    ) {
+      error.message +=
+        '\nHint: Tailwind classes containing punctuation cannot use Pug dot shorthand. Move them into a quoted class attribute, e.g. span.rounded-full(class="py-0.5 w-2/3 text-[13px] md:flex-row bg-primary/10"). Keep simple classes such as .text-xs in shorthand.';
+    }
+    throw error;
+  }
 }

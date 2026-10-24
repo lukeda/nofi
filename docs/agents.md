@@ -6,21 +6,15 @@ Invoke the installed `nofi` skill using your agent’s skill picker or mention s
 
 ## Install the skill
 
-From this checkout, preview discovery:
+Install into your target project:
 
 ```sh
-npx skills add . --list
+npx skills add lukeda/nofi --skill nofi
 ```
 
-Install into your target project by running this from that project directory:
+Add `-g` for installation across projects. For skill development, replace `lukeda/nofi` with the path to your local checkout.
 
-```sh
-npx skills add /path/to/nofi --skill nofi
-```
-
-Replace `/path/to/nofi` with the checkout's actual path. Once the repository is on GitHub, use `npx skills add lukeda/nofi --skill nofi`. Add `-g` for installation across projects.
-
-The installer is `skills` (plural). Installing a skill installs its instructions; renderer setup is separate. The npm package will be `@lukeda/nofi`; after publication, use `npx --yes @lukeda/nofi@<version>` with a real published version. Follow the [development guide](development.md) to install the renderer from a checkout.
+The installer is `skills` (plural). It installs instructions; the agent runs the renderer separately through `npx --yes @lukeda/nofi`. PNG export requires `npx --yes @lukeda/nofi setup` to install Chromium. See the [development guide](development.md) for working from a checkout.
 
 The skill is self-contained so installation does not depend on files outside its folder. See the [upstream skill format](https://github.com/vercel-labs/skills/blob/main/docs/creating-skills.md).
 
