@@ -1,0 +1,7 @@
+node_modules/
+output/
+coverage/
+*.tgz
+.DS_Store
+playground/generated.js
+.test-output/

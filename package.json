@@ -1,0 +1,66 @@
+{
+  "name": "@lukeda/nofi",
+  "version": "0.0.1",
+  "description": "Low-fidelity mockups for agents. Pug structure, Tailwind layout, instant comparison boards.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "nofi": "./src/cli.js"
+  },
+  "exports": "./src/index.js",
+  "files": [
+    "src",
+    "themes",
+    "examples",
+    "docs/*.md",
+    "LICENSE",
+    "skills"
+  ],
+  "scripts": {
+    "cli": "node src/cli.js",
+    "test": "node --test test/core.test.js test/config.test.js test/board-config.test.js",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test:browser": "node --test test/browser.test.js",
+    "site:build": "node scripts/prepare-playground.js && esbuild playground/app.js --bundle --platform=browser --format=iife --target=es2022 --loader:.css=text --alias:assert=./playground/assert.cjs --minify --outfile=docs/playground/app.js",
+    "site:dev": "pnpm site:build && node scripts/serve-playground.js",
+    "test:playground": "pnpm site:build && esbuild playground/render.js --bundle --platform=browser --format=esm --target=es2022 --loader:.css=text --alias:assert=./playground/assert.cjs --outfile=.test-output/playground-render.mjs && node --test test/playground-render.test.js test/highlight.test.js",
+    "test:playground:browser": "pnpm site:build && node --test test/playground.test.js",
+    "check": "pnpm test && pnpm run format:check && pnpm test:playground"
+  },
+  "keywords": [
+    "wireframe",
+    "mockup",
+    "agents",
+    "pug",
+    "tailwindcss",
+    "prototyping"
+  ],
+  "dependencies": {
+    "acorn": "^8.18.0",
+    "playwright": "^1.64.1",
+    "pug-lexer": "^5.0.1",
+    "pug-parser": "^6.0.0",
+    "tailwindcss": "^4.3.3",
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "prettier": "^3.9.6"
+  },
+  "packageManager": "pnpm@11.10.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukeda/nofi.git"
+  },
+  "homepage": "https://lukeda.github.io/nofi/",
+  "bugs": {
+    "url": "https://github.com/lukeda/nofi/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

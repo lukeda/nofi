@@ -1,0 +1,11 @@
+viewport: [640, 480]
+columns: 2
+items:
+  - file: 07-login-centered.pug
+    name: Sign in
+  - file: 01-sidebar.pug
+    name: Projects
+  - file: 09-settings-sections.pug
+    name: Settings
+  - file: 11-checkout-summary.pug
+    name: Checkout

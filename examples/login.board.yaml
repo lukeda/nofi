@@ -1,0 +1,11 @@
+viewport: [640, 480]
+columns: 2
+items:
+  - file: 07-login-centered.pug
+    name: A centered form
+  - file: 08-login-split.pug
+    name: A split layout
+  - file: 13-login-card.pug
+    name: A contained card
+  - file: 14-login-wide.pug
+    name: A wide form

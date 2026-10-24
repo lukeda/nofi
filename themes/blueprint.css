@@ -1,0 +1,16 @@
+:root {
+  --nofi-ink: #dbeafe;
+  --nofi-paper: #172f50;
+  --nofi-muted: #23466f;
+  --nofi-line: #6c97be;
+  --nofi-muted-foreground: #a6bdd6;
+}
+body {
+  font-family: monospace;
+}
+button,
+input,
+textarea,
+select {
+  border-radius: 0;
+}

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Edit nofi mockups and preview layouts at different screen sizes."
+    />
+    <title>nofi playground</title>
+    <link rel="stylesheet" href="./playground/style.css" />
+    <script defer src="./playground/app.js"></script>
+  </head>
+  <body>
+    <header class="toolbar">
+      <a class="wordmark" href="./" aria-label="nofi home">nofi</a>
+      <select id="example" aria-label="Example" disabled>
+        <option>Loading examples…</option>
+      </select>
+      <select id="preset" aria-label="Viewport">
+        <option value="default">Project default</option>
+        <option value="1280x800">Desktop</option>
+        <option value="1024x768">Laptop</option>
+        <option value="768x1024">Tablet</option>
+        <option value="390x844">iPhone</option>
+        <option value="412x915">Android</option>
+        <option value="custom">Custom</option>
+      </select>
+      <div class="dimensions">
+        <input
+          id="width"
+          aria-label="Width"
+          title="Viewport width"
+          type="number"
+          min="1"
+          max="4096"
+          step="1"
+          value="640"
+        />
+        <span aria-hidden="true">×</span>
+        <input
+          id="height"
+          aria-label="Height"
+          title="Viewport height"
+          type="number"
+          min="1"
+          max="4096"
+          step="1"
+          value="480"
+        />
+        <button
+          id="rotate"
+          title="Swap width and height"
+          aria-label="Swap width and height"
+        >
+          ⇄
+        </button>
+      </div>
+      <select id="theme" aria-label="Theme">
+        <option value="wireframe">Wireframe</option>
+        <option value="blueprint">Blueprint</option>
+      </select>
+      <div class="actions">
+        <button id="download-source" disabled>Save .pug</button>
+        <button id="download-html" disabled>Save HTML</button>
+        <a href="https://github.com/lukeda/nofi/blob/main/docs/format.md"
+          >Syntax</a
+        >
+      </div>
+    </header>
+    <main class="workspace">
+      <section class="editor-panel" aria-label="Source editor">
+        <pre
+          id="highlight"
+          aria-hidden="true"
+        ><code id="highlight-code"></code></pre>
+        <textarea
+          id="source"
+          aria-label="Nofi source"
+          spellcheck="false"
+          autocapitalize="off"
+          autocomplete="off"
+          wrap="off"
+          disabled
+        ></textarea>
+      </section>
+      <section class="preview-panel" aria-label="Preview">
+        <div class="preview-stage" id="stage">
+          <div id="viewport-shell">
+            <iframe id="preview" title="Rendered nofi mockup" sandbox></iframe>
+          </div>
+        </div>
+        <div id="error-panel" class="error-panel" hidden>
+          <pre id="error" role="alert"></pre>
+          <p>Showing the last valid preview.</p>
+        </div>
+      </section>
+    </main>
+    <noscript>This playground needs JavaScript to render your mockup.</noscript>
+  </body>
+</html>

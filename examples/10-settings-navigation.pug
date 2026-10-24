@@ -1,0 +1,14 @@
+main.flex.min-h-screen
+  nav.w-36.shrink-0.space-y-4.border-r.p-5
+    h2 Settings
+    a.block.bg-muted.p-2 Account
+    a.block Notifications
+    a.block Billing
+  section.flex-1.space-y-4.p-6
+    h1 Account
+    p Manage your personal details.
+    label.block(for="name") Name
+    input.w-full(id="name" value="Alex Morgan")
+    label.block(for="email") Email
+    input.w-full(id="email" value="alex@example.com")
+    button.bg-primary.text-primary-foreground Save changes

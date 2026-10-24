@@ -1,0 +1,36 @@
+body
+  main.mx-auto.space-y-5.p-8
+    header.flex.items-center.justify-between
+      h2 Acme
+      nav.flex.gap-4
+        a Projects
+        a Team
+    hr
+    div.flex.items-center.justify-between
+      h1 Projects
+      button + New
+    div.flex.gap-3
+      input.flex-1(placeholder="Search projects")
+      select
+        option All projects
+        option Active
+    table
+      thead
+        tr
+          th Project
+          th Tasks left
+          th Due
+      tbody
+        tr
+          td Website
+          td 8
+          td Friday
+        tr
+          td Mobile app
+          td 12
+          td Next week
+        tr
+          td Documentation
+          td 3
+          td Monday
+    p.text-sm 3 projects · Everything in one place

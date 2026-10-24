@@ -1,0 +1,16 @@
+main.flex.min-h-screen.flex-col
+  header.border-b.p-5
+    h2 Acme
+  section.flex.flex-1.flex-col.justify-center.gap-5.p-8
+    h1 Welcome back
+    p Sign in to your workspace.
+    div.grid.grid-cols-2.gap-5
+      div.space-y-2
+        label.block(for="email") Email
+        input.w-full(id="email" type="email" placeholder="you@example.com")
+      div.space-y-2
+        label.block(for="password") Password
+        input.w-full(id="password" type="password" placeholder="Your password")
+    div.flex.items-center.justify-between
+      a Forgot password?
+      button.bg-primary.text-primary-foreground Sign in

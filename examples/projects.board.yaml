@@ -1,0 +1,15 @@
+viewport: [640, 480]
+columns: 3
+items:
+  - file: 01-sidebar.pug
+    name: Sidebar navigation
+  - file: 02-topbar.pug
+    name: Top navigation
+  - file: 03-split.pug
+    name: Project details
+  - file: 04-list.pug
+    name: Compact list
+  - file: 05-projects-kanban.pug
+    name: Kanban
+  - file: 06-projects-overview.pug
+    name: Overview

@@ -1,0 +1,290 @@
+:root {
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+  color: #30352b;
+  background: #f5f6f2;
+  font-synthesis: none;
+  --line: #dfe3da;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+button,
+select {
+  cursor: pointer;
+}
+button:disabled,
+select:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+a {
+  color: inherit;
+}
+button:focus-visible,
+a:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 2px solid #8da96a;
+  outline-offset: 2px;
+}
+textarea:focus-visible {
+  outline: 2px solid #999;
+  outline-offset: -2px;
+}
+.toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  background: white;
+}
+.wordmark {
+  font-size: 23px;
+  font-weight: 750;
+  letter-spacing: -1px;
+  text-decoration: none;
+  margin-right: 8px;
+}
+select,
+input,
+button {
+  height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: white;
+  color: inherit;
+  font-size: 12px;
+}
+select {
+  padding: 0 24px 0 8px;
+  max-width: 100%;
+}
+#example {
+  width: 220px;
+}
+input {
+  width: 68px;
+  padding: 0 6px;
+}
+button {
+  padding: 0 10px;
+  white-space: nowrap;
+}
+button:hover:not(:disabled) {
+  background: #f0f3eb;
+}
+.dimensions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dimensions span {
+  color: #8a9180;
+  font-size: 12px;
+}
+#rotate {
+  border: 0;
+  padding: 0 6px;
+  font-size: 19px;
+}
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+.actions a {
+  font-size: 12px;
+  text-decoration: none;
+  margin-left: 4px;
+}
+.actions a:hover {
+  text-decoration: underline;
+}
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.85fr) minmax(360px, 1.4fr);
+  flex: 1;
+  min-height: 0;
+}
+.editor-panel {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  --line: #444;
+  background: #242424;
+  border-right: 1px solid var(--line);
+}
+textarea,
+#highlight {
+  display: block;
+  resize: none;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 22px;
+  border: 0;
+  margin: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #ddd;
+  font:
+    13px/1.85 ui-monospace,
+    SFMono-Regular,
+    Consolas,
+    monospace;
+  tab-size: 2;
+  caret-color: #eee;
+  scrollbar-color: #666 #242424;
+  white-space: pre;
+  overflow: auto;
+}
+textarea::selection {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  background: #ffffff22;
+}
+textarea {
+  position: relative;
+  z-index: 1;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+#highlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+#highlight code {
+  font: inherit;
+}
+.syntax-tag {
+  color: #82c7ff;
+  font-weight: 700;
+}
+.syntax-class {
+  color: #d7b5fa;
+}
+.syntax-attribute {
+  color: #f0c780;
+}
+.syntax-string {
+  color: #b5d99c;
+}
+.syntax-text {
+  color: #ddd;
+}
+.syntax-punctuation {
+  color: #aaa;
+}
+.syntax-comment {
+  color: #999;
+  font-style: italic;
+}
+.preview-panel {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.preview-stage {
+  flex: 1;
+  min-height: 120px;
+  background: #edf0e9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 32px;
+}
+#viewport-shell {
+  position: relative;
+  flex: none;
+  background: white;
+  box-shadow: 0 0 0 1px #c2cbb7;
+}
+iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 0;
+  background: white;
+  transform-origin: top left;
+  display: block;
+}
+.error-panel {
+  padding: 12px 18px;
+  background: #fff5ee;
+  border-top: 1px solid #e2b9a4;
+  color: #8d3824;
+}
+.error-panel[hidden] {
+  display: none;
+}
+.error-panel pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 11px;
+  max-height: 140px;
+  overflow: auto;
+  margin: 0;
+}
+.error-panel p {
+  font-size: 11px;
+  margin: 8px 0 0;
+}
+noscript {
+  padding: 20px;
+}
+@media (max-width: 700px) {
+  body {
+    height: auto;
+    min-height: 100dvh;
+  }
+  .toolbar {
+    padding: 10px;
+    gap: 8px;
+  }
+  #example {
+    flex: 1;
+    min-width: 0;
+  }
+  .actions {
+    margin-left: 0;
+  }
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+  .editor-panel {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  textarea {
+    height: 340px;
+  }
+  .preview-stage {
+    height: 560px;
+    flex: none;
+  }
+}

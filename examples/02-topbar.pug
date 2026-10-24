@@ -1,0 +1,29 @@
+body
+  header.flex.items-center.justify-between.border-b.p-5
+    h2 Acme
+    nav.flex.gap-5
+      a Projects
+      a Team
+      a Settings
+  main.space-y-5.p-6
+    div.flex.items-center.justify-between
+      div
+        h1 Your projects
+        p Everything your team is working on.
+      button New project
+    input.w-full(placeholder="Find a project")
+    div.grid.grid-cols-3.gap-4
+      article.space-y-3.border.p-3
+        figure.h-24
+          figcaption Website
+        h3 Website
+        p 8 tasks left
+        button Open
+      article.space-y-3.border.p-3
+        figure.h-24
+          figcaption App
+        h3 Mobile app
+        p 12 tasks left
+        button Open
+      article.flex.items-center.justify-center.border.p-3
+        button + Create
