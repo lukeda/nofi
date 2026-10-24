@@ -5,3 +5,6 @@ coverage/
 .DS_Store
 playground/generated.js
 .test-output/
+docs/index.html
+docs/playground/
+docs/.nojekyll

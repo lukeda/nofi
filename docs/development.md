@@ -16,7 +16,9 @@ For PNGs and browser tests, install Chromium once with `pnpm cli setup`. Run `pn
 
 ## GitHub Pages
 
-Run `pnpm site:build` and commit `docs/index.html`, `docs/playground/`, and `docs/.nojekyll` with the source. In GitHub **Settings → Pages**, choose **Deploy from a branch → main → /docs**. Relative asset paths support repository subpaths. No custom Actions workflow is required; GitHub still runs its own Pages deployment workflow.
+The `.github/workflows/pages.yml` workflow builds and deploys the site on every push to `main`, or manually through Actions. In GitHub **Settings → Pages**, select **GitHub Actions** as the publishing source. The workflow runs `pnpm check`, which tests the project and builds the playground, then uploads `docs/` as a Pages artifact. Relative asset paths support repository subpaths.
+
+For local development, run `pnpm site:build` or `pnpm site:dev`. Generated `docs/index.html`, `docs/playground/`, and `docs/.nojekyll` files are ignored by Git; commit their source in `playground/` instead.
 
 The repository is [lukeda/nofi](https://github.com/lukeda/nofi) and the Pages URL is [lukeda.github.io/nofi](https://lukeda.github.io/nofi/). Set the repository About website to that Pages URL after enabling deployment. These destinations are configured in the package metadata; they are not deployed by the local build.
 
@@ -59,4 +61,4 @@ pnpm test:playground:browser
 pnpm pack --dry-run
 ```
 
-Keep the generated Pages files in sync with source changes.
+Verify site changes with `pnpm site:build`; Pages builds the generated output during deployment.
